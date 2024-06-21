@@ -98,19 +98,19 @@ void addMedicine(medicine arr[], int *medCount) {
             printf("Enter expiry date: ");
             scanf("%s", arr[*medCount].expDate);
 
+            printf("Enter type: ");
+            scanf("%s", arr[*medCount].type);
+
             printf("Enter quantity: ");
             scanf("%d", &arr[*medCount].quantity);
 
             printf("Enter price per quantity: ");
             scanf("%f", &arr[*medCount].price);
 
-            printf("Enter type: ");
-            scanf("%s", arr[*medCount].type);
-
             (*medCount)++;
         }
 
-        printf("Do you wish to add more medicine?\nAns: ");
+        printf("Do you wish to add more medicine?\nAns (y/n): ");
         scanf(" %c", &opt);
     } while (opt == 'y');
 }
@@ -129,9 +129,9 @@ void purchaseMedicine(medicine arr[], int medCount) {
         printf("Enter medicine type: ");
         scanf("%s", tempType);
 
-        int j;
+        int j, f=1;
         for (j = 0; j < medCount; j++) {
-            if (strcmp(tempName, arr[j].nameMed) == 0) {
+            if (strcmp(tempName, arr[j].nameMed) == 0 && strcmp(tempType, arr[j].type) == 0) {
                 printf("Enter quantity: ");
                 scanf("%d", &tempQuant);
 
@@ -143,15 +143,16 @@ void purchaseMedicine(medicine arr[], int medCount) {
                     buy[buyCount].quantity = tempQuant;
                     buyCount++;
                 }
+                f=0;
                 break;
             }
         }
 
-        if (j == medCount) {
+        if (f) {
             printf("Not-Found\n");
         }
 
-        printf("Do you wish to purchase more medicine?\nAns: ");
+        printf("Do you wish to purchase more medicine?\nAns (y/n): ");
         scanf(" %c", &opt);
     } while (opt == 'y');
 
@@ -170,43 +171,51 @@ void removeMedicine(medicine arr[], int *medCount) {
         printf("Enter medicine type: ");
         scanf("%s", tempType);
 
-        int j;
+        int j, f=1;
         for (j = 0; j < *medCount; j++) {
-            if (strcmp(tempName, arr[j].nameMed) == 0) {
+            if (strcmp(tempName, arr[j].nameMed) == 0 && strcmp(tempType, arr[j].type) == 0) {
                 (*medCount)--;
                 for (int k = j; k < *medCount; k++) {
                     arr[k] = arr[k + 1];
                 }
+                f=0;
                 break;
             }
         }
 
-        if (j == *medCount) {
+        if (f) {
             printf("Not-Found\n");
         }
 
-        printf("Do you wish to delete more medicine?\nAns: ");
+        printf("Do you wish to delete more medicine?\nAns (y/n): ");
         scanf(" %c", &opt);
     } while (opt == 'y');
 }
 
 void displayMedicineStatistics(medicine arr[], int medCount) {
-    printf("SN. ID NameOfMedicine NameOfManuf ManufDate ExpDate Quantity Price Type   TotalPrice\n");
+    printf("SN.\t%-10s\t%-20s\t%-20s\t%-12s\t%-12s\t%-8s\t%-8s\t%-10s\t%-10s\n", 
+           "ID", "NameOfMedicine", "NameOfManuf", "ManufDate", "ExpDate", 
+           "Quantity", "Price", "Type", "TotalPrice");
 
     for (int k = 0; k < medCount; k++) {
-        printf("%d. %s %s %s %s %s %d %f %s   %f\n", k + 1, arr[k].ID, arr[k].nameMed, arr[k].nameMan,
+        printf("%-4d\t%-10s\t%-20s\t%-20s\t%-12s\t%-12s\t%-8d\t%-8.2f\t%-10s\t%-10.2f\n", 
+               k + 1, arr[k].ID, arr[k].nameMed, arr[k].nameMan,
                arr[k].manDate, arr[k].expDate, arr[k].quantity, arr[k].price, arr[k].type,
                arr[k].quantity * arr[k].price);
     }
 }
 
+
 void printBill(medicine buy[], int buyCount) {
     printf("\nBill:\n");
-    printf("SN. ID NameOfMedicine NameOfManuf ManufDate ExpDate Quantity Price Type   TotalPrice\n");
+    printf("SN.\t%-10s\t%-20s\t%-20s\t%-12s\t%-12s\t%-8s\t%-8s\t%-10s\t%-10s\n", 
+           "ID", "NameOfMedicine", "NameOfManuf", "ManufDate", "ExpDate", 
+           "Quantity", "Price", "Type", "TotalPrice");
 
     for (int k = 0; k < buyCount; k++) {
-        printf("%d. %-10s %-15s %-15s %-10s %-10s %-8d %-8.2f %-10s %-8.2f\n", k + 1, buy[k].ID, buy[k].nameMed,
-               buy[k].nameMan, buy[k].manDate, buy[k].expDate, buy[k].quantity, buy[k].price, buy[k].type,
+        printf("%-4d\t%-10s\t%-20s\t%-20s\t%-12s\t%-12s\t%-8d\t%-8.2f\t%-10s\t%-10.2f\n", 
+               k + 1, buy[k].ID, buy[k].nameMed, buy[k].nameMan, buy[k].manDate, 
+               buy[k].expDate, buy[k].quantity, buy[k].price, buy[k].type, 
                buy[k].quantity * buy[k].price);
     }
 
